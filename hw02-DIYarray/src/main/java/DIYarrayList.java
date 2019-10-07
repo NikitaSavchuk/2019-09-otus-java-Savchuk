@@ -2,23 +2,23 @@ import java.util.*;
 
 public class DIYarrayList<T> implements List<T> {
 
-    private final int DEFAULT_SIZE = 25;
+    private final int DEFAULT_CAPACITY = 25;
     private Object[] values;
-    private int size;
+    private int capacity;
 
-    DIYarrayList(int size) {
-        this.size = size;
-        values = new Object[size];
+    DIYarrayList(int capacity) {
+        this.capacity = capacity;
+        values = new Object[capacity];
     }
 
     DIYarrayList() {
-        this.size = 0;
-        values = new Object[DEFAULT_SIZE];
+        this.capacity = 0;
+        values = new Object[DEFAULT_CAPACITY];
     }
 
     @Override
     public int size() {
-        return size;
+        return capacity;
     }
 
     @Override
@@ -48,16 +48,11 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        try {
-            if (size + 1 > values.length)
-                values = Arrays.copyOf(values, size + 1);
-            values[size] = t;
-            size = size + 1;
-            return true;
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-        return false;
+        if (capacity + 1 > values.length)
+            values = Arrays.copyOf(values, values.length * 2);
+        values[capacity] = t;
+        capacity = capacity + 1;
+        return true;
     }
 
     @Override
@@ -113,6 +108,7 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
+        if ((index < 0) || (index >= capacity)) throw new NoSuchElementException();
         return (T) values[index];
     }
 
@@ -159,84 +155,78 @@ public class DIYarrayList<T> implements List<T> {
     }
 
     public void sort(Comparator<? super T> c) {
-        Arrays.sort((T[]) values, 0, size, c);
+        Arrays.sort((T[]) values, 0, capacity, c);
     }
 
     @Override
     public String toString() {
         return "DIYarrayList{" +
                 "values=" + Arrays.toString(values) +
-                ", size=" + size +
+                ", capacity=" + capacity +
                 '}';
     }
 
     private class DIYarrayListIterator implements ListIterator<T> {
 
-        private int val;
-        int last;
+        private int nextElement;
+        private int lastReturned;
 
-        public DIYarrayListIterator(int index) {
-            val = index;
+        DIYarrayListIterator(int index) {
+            nextElement = index;
         }
 
         @Override
         public boolean hasNext() {
-            return val != size;
+            return nextElement != capacity;
         }
 
         @Override
         public T next() {
-            int i = val;
-            if (i >= size)
+            int i = nextElement;
+            if (i >= capacity)
                 throw new NoSuchElementException();
             Object[] values = DIYarrayList.this.values;
-            val = i + 1;
-            return (T) values[last = i];
+            nextElement = i + 1;
+            return (T) values[lastReturned = i];
         }
 
         @Override
         public boolean hasPrevious() {
-            return val != 0;
+            return nextElement != 0;
         }
 
         @Override
         public T previous() {
-            int i = val - 1;
-            val = i;
-            return (T) DIYarrayList.this.values[last = i];
+            int i = nextElement - 1;
+            nextElement = i;
+            return (T) DIYarrayList.this.values[lastReturned = i];
         }
 
         @Override
         public int nextIndex() {
-            return val;
+            return nextElement;
         }
 
         @Override
         public int previousIndex() {
-            return val - 1;
+            return nextElement - 1;
         }
 
         @Override
         public void remove() {
-            try {
-                DIYarrayList.this.remove(last);
-                val = last;
-                last = -1;
-            } catch (IndexOutOfBoundsException e) {
-                throw new ConcurrentModificationException();
-            }
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void set(T t) {
-            DIYarrayList.this.set(last, t);
+            DIYarrayList.this.set(lastReturned, t);
         }
 
         @Override
         public void add(T t) {
             DIYarrayList.this.add(t);
-            val += 1;
-            last = -1;
+            nextElement += 1;
+            lastReturned = -1;
         }
     }
 }

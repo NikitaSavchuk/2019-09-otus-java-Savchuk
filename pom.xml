@@ -14,7 +14,7 @@
 
     <modules>
         <module>hw01-maven</module>
-        <module>hw02-maven</module>
+        <module>hw02-DIYarray</module>
     </modules>
 
     <properties>

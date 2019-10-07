@@ -17,7 +17,7 @@ public class DIYarrayListTest {
     @Test
     @DisplayName("Add all")
     public void addAll() {
-        System.out.println("\nAdd All:");
+        System.out.println("Add All:");
         List<Integer> list = new DIYarrayList<>();
 
         addToTheList(list);
@@ -30,7 +30,7 @@ public class DIYarrayListTest {
     @Test
     @DisplayName("Copy")
     public void copy() {
-        System.out.println("\nCopy:");
+        System.out.println("Copy:");
         List<Integer> firstList = new DIYarrayList<>();
 
         addToTheList(firstList);
@@ -45,7 +45,7 @@ public class DIYarrayListTest {
     @Test
     @DisplayName("Sort")
     public void sort() {
-        System.out.println("\nSort:");
+        System.out.println("Sort:");
         List<Integer> list = new DIYarrayList<>();
 
         addToTheList(list);
