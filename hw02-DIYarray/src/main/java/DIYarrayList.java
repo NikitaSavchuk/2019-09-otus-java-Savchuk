@@ -2,23 +2,23 @@ import java.util.*;
 
 public class DIYarrayList<T> implements List<T> {
 
-    private final int DEFAULT_CAPACITY = 25;
+    private static final int DEFAULT_CAPACITY = 10;
     private Object[] values;
-    private int capacity;
+    private int size;
 
     DIYarrayList(int capacity) {
-        this.capacity = capacity;
+        size = capacity;
         values = new Object[capacity];
     }
 
     DIYarrayList() {
-        this.capacity = 0;
+        size = 0;
         values = new Object[DEFAULT_CAPACITY];
     }
 
     @Override
     public int size() {
-        return capacity;
+        return size;
     }
 
     @Override
@@ -48,10 +48,10 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        if (capacity + 1 > values.length)
+        if (size + 1 > values.length)
             values = Arrays.copyOf(values, values.length * 2);
-        values[capacity] = t;
-        capacity = capacity + 1;
+        values[size] = t;
+        size = size + 1;
         return true;
     }
 
@@ -108,12 +108,17 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        if ((index < 0) || (index >= capacity)) throw new NoSuchElementException();
+        checkIndex((index < 0) || (index >= size));
         return (T) values[index];
+    }
+
+    private void checkIndex(boolean b) {
+        if (b) throw new NoSuchElementException();
     }
 
     @Override
     public T set(int index, T element) {
+        checkIndex(index < 0);
         T oldValues = (T) values[index];
         values[index] = element;
         return oldValues;
@@ -155,15 +160,7 @@ public class DIYarrayList<T> implements List<T> {
     }
 
     public void sort(Comparator<? super T> c) {
-        Arrays.sort((T[]) values, 0, capacity, c);
-    }
-
-    @Override
-    public String toString() {
-        return "DIYarrayList{" +
-                "values=" + Arrays.toString(values) +
-                ", capacity=" + capacity +
-                '}';
+        Arrays.sort((T[]) values, 0, size, c);
     }
 
     private class DIYarrayListIterator implements ListIterator<T> {
@@ -177,14 +174,13 @@ public class DIYarrayList<T> implements List<T> {
 
         @Override
         public boolean hasNext() {
-            return nextElement != capacity;
+            return nextElement != size;
         }
 
         @Override
         public T next() {
             int i = nextElement;
-            if (i >= capacity)
-                throw new NoSuchElementException();
+            checkIndex(i >= size);
             Object[] values = DIYarrayList.this.values;
             nextElement = i + 1;
             return (T) values[lastReturned = i];
@@ -198,6 +194,7 @@ public class DIYarrayList<T> implements List<T> {
         @Override
         public T previous() {
             int i = nextElement - 1;
+            checkIndex(i < 0);
             nextElement = i;
             return (T) DIYarrayList.this.values[lastReturned = i];
         }
@@ -219,6 +216,8 @@ public class DIYarrayList<T> implements List<T> {
 
         @Override
         public void set(T t) {
+            if (nextElement < 0)
+                throw new IllegalStateException();
             DIYarrayList.this.set(lastReturned, t);
         }
 
