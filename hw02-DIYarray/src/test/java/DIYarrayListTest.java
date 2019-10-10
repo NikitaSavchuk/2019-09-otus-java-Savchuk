@@ -15,33 +15,32 @@ public class DIYarrayListTest {
         List<Integer> list = new DIYarrayList<>();
         boolean result = Collections.addAll(list, integers);
         Assert.assertTrue(result);
-        print(list);
-    }
-
-    private void print(List<Integer> list) {
-        for (Integer srt : list) {
-            System.out.print(srt + " ");
-        }
+        System.out.println("Список: " + list);
     }
 
     @Test
     @DisplayName("Copy")
     public void copy() {
+        System.out.println("Copy:");
         List<Integer> firstList = new DIYarrayList<>();
         Collections.addAll(firstList, integers);
         List<Integer> secondList = new DIYarrayList<>(firstList.size());
+        System.out.println("Первый список :" + firstList);
         Collections.copy(secondList, firstList);
+        System.out.println("Второй список :" + secondList);
         Assert.assertEquals("Списки разные", firstList.size(), secondList.size());
     }
 
     @Test
     @DisplayName("Sort")
     public void sort() {
+        System.out.println("Sort:");
         List<Integer> list = new DIYarrayList<>();
         Collections.addAll(list, integers);
+        System.out.println("Список после добавления :" + list);
         Collections.sort(list);
+        System.out.println("Список после сортировки :" + list);
         int listSize = list.size();
-        print(list);
         for (int i = 0; i < listSize - 1; i++) {
             Assert.assertTrue(list.get(i) <= list.get(i + 1));
         }

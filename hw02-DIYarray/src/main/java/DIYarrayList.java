@@ -125,6 +125,15 @@ public class DIYarrayList<T> implements List<T> {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder result = new StringBuilder("[");
+        for (int i = 0; i < size - 1; i++) {
+            result.append(values[i]).append(", ");
+        }
+        return result.append(values[size - 1]).append(']').toString();
+    }
+
+    @Override
     public void add(int index, T element) {
         throw new UnsupportedOperationException();
     }
