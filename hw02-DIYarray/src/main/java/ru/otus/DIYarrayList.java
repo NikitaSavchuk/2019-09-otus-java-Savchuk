@@ -1,3 +1,4 @@
+package ru.otus;
 import java.util.*;
 
 public class DIYarrayList<T> implements List<T> {
@@ -7,12 +8,10 @@ public class DIYarrayList<T> implements List<T> {
     private int size;
 
     DIYarrayList(int capacity) {
-        size = capacity;
         values = new Object[capacity];
     }
 
     DIYarrayList() {
-        size = 0;
         values = new Object[DEFAULT_CAPACITY];
     }
 
@@ -38,7 +37,7 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        return Arrays.copyOf(values, values.length);
+        return Arrays.copyOf(values, size);
     }
 
     @Override
@@ -108,17 +107,17 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        checkIndex((index < 0) || (index >= size));
+        checkIndex(index);
         return (T) values[index];
     }
 
-    private void checkIndex(boolean b) {
-        if (b) throw new NoSuchElementException();
+    private void checkIndex(int index) {
+        if ((index < 0) || (index >= size)) throw new NoSuchElementException();
     }
 
     @Override
     public T set(int index, T element) {
-        checkIndex(index < 0);
+        checkIndex(index);
         T oldValues = (T) values[index];
         values[index] = element;
         return oldValues;
@@ -175,7 +174,7 @@ public class DIYarrayList<T> implements List<T> {
     private class DIYarrayListIterator implements ListIterator<T> {
 
         private int nextElement;
-        private int lastReturned;
+        int lastReturned = -1;
 
         DIYarrayListIterator(int index) {
             nextElement = index;
@@ -189,7 +188,7 @@ public class DIYarrayList<T> implements List<T> {
         @Override
         public T next() {
             int i = nextElement;
-            checkIndex(i >= size);
+            checkNextElement(i >= size);
             Object[] values = DIYarrayList.this.values;
             nextElement = i + 1;
             return (T) values[lastReturned = i];
@@ -203,9 +202,15 @@ public class DIYarrayList<T> implements List<T> {
         @Override
         public T previous() {
             int i = nextElement - 1;
-            checkIndex(i < 0);
+            checkNextElement(i < 0);
+            Object[] values = DIYarrayList.this.values;
             nextElement = i;
-            return (T) DIYarrayList.this.values[lastReturned = i];
+            return (T) values[lastReturned = i];
+        }
+
+        private void checkNextElement(boolean b) {
+            if (b)
+                throw new NoSuchElementException();
         }
 
         @Override
@@ -225,7 +230,7 @@ public class DIYarrayList<T> implements List<T> {
 
         @Override
         public void set(T t) {
-            if (nextElement < 0)
+            if (lastReturned < 0)
                 throw new IllegalStateException();
             DIYarrayList.this.set(lastReturned, t);
         }
