@@ -1,4 +1,5 @@
 package ru.otus;
+
 import java.util.*;
 
 public class DIYarrayList<T> implements List<T> {
@@ -8,7 +9,13 @@ public class DIYarrayList<T> implements List<T> {
     private int size;
 
     DIYarrayList(int capacity) {
-        values = new Object[capacity];
+        if (capacity == 0) {
+            values = new Object[DEFAULT_CAPACITY];
+        } else if (capacity > 0) {
+            values = new Object[capacity];
+        } else {
+            throw new IllegalArgumentException("Illegal argument exception");
+        }
     }
 
     DIYarrayList() {
