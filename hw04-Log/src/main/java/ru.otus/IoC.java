@@ -1,9 +1,6 @@
 package ru.otus;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,22 +8,21 @@ import java.util.stream.Collectors;
 
 public class IoC {
 
-    static TestInterface createMyClass() {
-        InvocationHandler handler = new DemoInvocationHandler(new TestLogging());
-        return (TestInterface) Proxy.newProxyInstance(IoC.class.getClassLoader(),
-                new Class<?>[]{TestInterface.class}, handler);
+    static <T> T createMyClass(Class<T> myClassInterface , Class<? extends T> myClassImpl) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        InvocationHandler handler = new DemoInvocationHandler<T>(myClassImpl);
+        return (T) Proxy.newProxyInstance(IoC.class.getClassLoader(), new Class<?>[]{myClassInterface }, handler);
     }
 
-    static class DemoInvocationHandler implements InvocationHandler {
-        private final TestInterface myClass;
-        private final Set<String> listMethods = new HashSet<>();
+    static class DemoInvocationHandler<T> implements InvocationHandler {
+        private final T myClass;
+        private final Set<String> methodsForLog = new HashSet<>();
 
-        DemoInvocationHandler(TestInterface myClass) {
-            this.myClass = myClass;
+        DemoInvocationHandler(Class<? extends T> myClassImpl) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            this.myClass = myClassImpl.getConstructor().newInstance();
             Method[] methods = this.myClass.getClass().getDeclaredMethods();
             for (Method m : methods) {
                 if (m.getAnnotation(Log.class) != null) {
-                    listMethods.add(getMethodNameWithParametersTypes(m));
+                    methodsForLog.add(getMethodNameWithParametersTypes(m));
                 }
             }
         }
@@ -44,7 +40,7 @@ public class IoC {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (listMethods.contains(getMethodNameWithParametersTypes(method))) {
+            if (methodsForLog.contains(getMethodNameWithParametersTypes(method))) {
                 System.out.println(String.format("executed method: %s, params: %s"
                         , method.getName(), args[0]));
             }
