@@ -16,6 +16,7 @@
         <module>hw01-maven</module>
         <module>hw02-DIYarray</module>
         <module>hw04-Log</module>
+        <module>hw05-annotations</module>
     </modules>
 
     <properties>
