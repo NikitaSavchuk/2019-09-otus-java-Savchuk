@@ -14,9 +14,9 @@ class TestRunner {
 
     private int succeed = 0;
     private int failed = 0;
-    ArrayList<Method> beforeMethods;
-    ArrayList<Method> testMethods;
-    ArrayList<Method> afterMethods;
+    private ArrayList<Method> beforeMethods;
+    private ArrayList<Method> testMethods;
+    private ArrayList<Method> afterMethods;
 
     public TestRunner() {
         beforeMethods = new ArrayList<>();
@@ -25,9 +25,46 @@ class TestRunner {
     }
 
     public void run(Class<?> testClass) {
-
         Method[] methods = testClass.getDeclaredMethods();
+        distributeMethods(methods);
 
+        if (testMethods.size() == 0) {
+            System.out.println("Тесты отсутствуют!");
+            return;
+        }
+
+        for (Method testMethod : testMethods) {
+            try {
+                Constructor<?> constructor = testClass.getConstructor(null);
+                Object obj = constructor.newInstance(null);
+                try {
+                    for (Method beforeEachMethod : beforeMethods) {
+                        beforeEachMethod.invoke(obj, null);
+                    }
+                    testMethod.invoke(obj, null);
+                    succeed++;
+                } catch (Exception e) {
+                    failed++;
+                    System.out.println("Ошибка во время теста " + testMethod.getName());
+                } finally {
+                    if (afterMethods.size() != 0) {
+                        for (Method afterEachMethod : afterMethods) {
+                            try {
+                                afterEachMethod.invoke(obj, null);
+                            } catch (Exception e) {
+                                System.out.println("Ошибка в методах после тестов!");
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        }
+        System.out.println(format("Прошло успешно \"%s\", упало \"%s\", всего тестов \"%s\"", succeed, failed, testMethods.size()));
+    }
+
+    private void distributeMethods(Method[] methods) {
         for (Method method : methods) {
             if (method.getAnnotation(Before.class) != null) {
                 beforeMethods.add(method);
@@ -42,42 +79,5 @@ class TestRunner {
                 continue;
             }
         }
-
-        if (testMethods.size() == 0) {
-            System.out.println("Тесты отсутствуют!");
-            return;
-        }
-
-        for (Method testMethod : testMethods) {
-            try {
-                Constructor<?> constructor = testClass.getConstructor(null);
-                Object obj = constructor.newInstance(null);
-                try {
-                    if (!(beforeMethods.size() == 0)) {
-                        for (Method beforeEachMethod : beforeMethods) {
-                            beforeEachMethod.invoke(obj, null);
-                        }
-                    }
-                    testMethod.invoke(obj, null);
-                    succeed++;
-                } catch (Exception e) {
-                    failed++;
-                    System.out.println("Ошибка во время теста " + testMethod.getName());
-                } finally {
-                    if (!(afterMethods.size() == 0)) {
-                        try {
-                            for (Method afterEachMethod : afterMethods) {
-                                afterEachMethod.invoke(obj, null);
-                            }
-                        } catch (Exception e) {
-                            System.out.println("Ошибка в методах после тестов!");
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println(e.toString());
-            }
-        }
-        System.out.println(format("Прошло успешно \"%s\", упало \"%s\", всего тестов \"%s\"", succeed, failed, testMethods.size()));
     }
 }
