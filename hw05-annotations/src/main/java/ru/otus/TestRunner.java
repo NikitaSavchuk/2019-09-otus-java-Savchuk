@@ -7,6 +7,7 @@ import ru.otus.annotations.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -14,9 +15,9 @@ class TestRunner {
 
     private int succeed = 0;
     private int failed = 0;
-    private ArrayList<Method> beforeMethods;
-    private ArrayList<Method> testMethods;
-    private ArrayList<Method> afterMethods;
+    private List<Method> beforeMethods;
+    private List<Method> testMethods;
+    private List<Method> afterMethods;
 
     public TestRunner() {
         beforeMethods = new ArrayList<>();
@@ -35,13 +36,13 @@ class TestRunner {
 
         for (Method testMethod : testMethods) {
             try {
-                Constructor<?> constructor = testClass.getConstructor(null);
-                Object obj = constructor.newInstance(null);
+                Constructor<?> constructor = testClass.getConstructor();
+                Object obj = constructor.newInstance();
                 try {
                     for (Method beforeEachMethod : beforeMethods) {
-                        beforeEachMethod.invoke(obj, null);
+                        beforeEachMethod.invoke(obj);
                     }
-                    testMethod.invoke(obj, null);
+                    testMethod.invoke(obj);
                     succeed++;
                 } catch (Exception e) {
                     failed++;
@@ -50,7 +51,7 @@ class TestRunner {
                     if (afterMethods.size() != 0) {
                         for (Method afterEachMethod : afterMethods) {
                             try {
-                                afterEachMethod.invoke(obj, null);
+                                afterEachMethod.invoke(obj);
                             } catch (Exception e) {
                                 System.out.println("Ошибка в методах после тестов!");
                             }

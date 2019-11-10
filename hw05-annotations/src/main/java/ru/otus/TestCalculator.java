@@ -28,7 +28,7 @@ public class TestCalculator {
     @Test
     public void getSumTest2() {
         int sum = testClass.getSum(a, b);
-        System.out.println(format("Сумма с ошибков %s, а ожидали 0", sum));
+        System.out.println(format("Сумма с ошибкой %s, ожидали 0", sum));
         if (sum != 0) throw new RuntimeException("Исключение");
     }
 
