@@ -15,6 +15,7 @@
     <modules>
         <module>hw01-maven</module>
         <module>hw02-DIYarray</module>
+        <module>hw03-GC</module>
         <module>hw04-Log</module>
         <module>hw05-annotations</module>
     </modules>
@@ -25,6 +26,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <com.google.guava.version>27.1-jre</com.google.guava.version>
         <maven.assembly.plugin.version>3.1.1</maven.assembly.plugin.version>
+        <lombok.version>1.18.10</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -33,6 +35,13 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${com.google.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+                <optional>true</optional>
             </dependency>
         </dependencies>
     </dependencyManagement>
