@@ -18,6 +18,7 @@
         <module>hw03-GC</module>
         <module>hw04-Log</module>
         <module>hw05-annotations</module>
+        <module>hw06-АТМ</module>
     </modules>
 
     <properties>
@@ -27,6 +28,7 @@
         <com.google.guava.version>27.1-jre</com.google.guava.version>
         <maven.assembly.plugin.version>3.1.1</maven.assembly.plugin.version>
         <lombok.version>1.18.10</lombok.version>
+        <junit-jupiter.version>5.3.2</junit-jupiter.version>
     </properties>
 
     <dependencyManagement>
@@ -42,6 +44,18 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
                 <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit-jupiter.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
