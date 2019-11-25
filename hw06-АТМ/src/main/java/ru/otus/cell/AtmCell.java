@@ -1,7 +1,8 @@
-package ru.otus;
+package ru.otus.cell;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.otus.BanknotePar;
 import ru.otus.atmException.CellOutOfAmountException;
 
 class AtmCell {

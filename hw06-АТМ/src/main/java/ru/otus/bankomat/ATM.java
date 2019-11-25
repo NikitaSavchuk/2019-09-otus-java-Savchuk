@@ -1,4 +1,6 @@
-package ru.otus;
+package ru.otus.bankomat;
+
+import ru.otus.BanknotePar;
 
 import java.util.Map;
 

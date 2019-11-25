@@ -1,6 +1,7 @@
-package ru.otus;
+package ru.otus.cell;
 
 import lombok.Getter;
+import ru.otus.BanknotePar;
 import ru.otus.atmException.CellIsFullException;
 import ru.otus.atmException.CellOutOfAmountException;
 
@@ -11,11 +12,11 @@ import java.util.TreeMap;
 
 import static java.lang.String.format;
 
-class Cell {
+public class Cell  implements MoneyKeeper {
     @Getter
     private final Map<Integer, AtmCell> CELL = new TreeMap<>();
 
-    Cell() {
+    public Cell() {
         try {
             for (BanknotePar banknoteValue : BanknotePar.values()) {
                 CELL.put(banknoteValue.getValue(), new AtmCell(banknoteValue, 50));
@@ -25,7 +26,8 @@ class Cell {
         }
     }
 
-    void deposit(BanknotePar banknoteParValue, int banknotesAmount) throws CellIsFullException, CellOutOfAmountException {
+    @Override
+    public void deposit(BanknotePar banknoteParValue, int banknotesAmount) throws CellIsFullException, CellOutOfAmountException {
         if (banknoteParValue == null || banknotesAmount <= 0) {
             throw new CellOutOfAmountException(format("Некорретно указана сумма '%s' или номинал '%s'", banknotesAmount, banknoteParValue));
         }
@@ -37,7 +39,8 @@ class Cell {
         cell.setBanknotesAmount(cell.getBanknotesAmount() + banknotesAmount);
     }
 
-    Map<BanknotePar, Integer> withdraw(int cashAmount) throws CellOutOfAmountException {
+    @Override
+    public Map<BanknotePar, Integer> withdraw(int cashAmount) throws CellOutOfAmountException {
         if (cashAmount > getCellBalance()) {
             throw new CellOutOfAmountException(format("Недостаточно средств для снятия, запрошено %s , текущий баланс %s", cashAmount, getCellBalance()));
         } else if (cashAmount <= 0) {
@@ -73,7 +76,7 @@ class Cell {
         return cashMap;
     }
 
-    int getCellBalance() {
+    public int getCellBalance() {
         int sum = 0;
         for (AtmCell atmCell : CELL.values()) {
             int freeSlots = atmCell.getCassetteBalance();

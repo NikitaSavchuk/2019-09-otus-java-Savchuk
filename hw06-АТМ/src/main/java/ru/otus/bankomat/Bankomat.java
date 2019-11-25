@@ -1,7 +1,9 @@
-package ru.otus;
+package ru.otus.bankomat;
 
+import ru.otus.BanknotePar;
 import ru.otus.atmException.CellIsFullException;
 import ru.otus.atmException.CellOutOfAmountException;
+import ru.otus.cell.Cell;
 
 import java.util.Collections;
 import java.util.Map;
