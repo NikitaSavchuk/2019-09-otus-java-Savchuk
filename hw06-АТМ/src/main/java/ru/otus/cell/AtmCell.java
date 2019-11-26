@@ -1,18 +1,13 @@
 package ru.otus.cell;
 
-import lombok.Getter;
-import lombok.Setter;
 import ru.otus.BanknotePar;
 import ru.otus.atmException.CellOutOfAmountException;
 
-class AtmCell {
+public class AtmCell {
     private final int MAX_CAPACITY = 1000;
-    @Getter
     private final BanknotePar BANKNOTE_VALUE;
 
-    @Setter @Getter
     private int banknotesAmount;
-    @Setter @Getter
     private int savedBanknoteAmount;
 
     AtmCell(BanknotePar banknoteValue, int banknotesAmount)  throws CellOutOfAmountException {
@@ -21,8 +16,25 @@ class AtmCell {
         this.BANKNOTE_VALUE = banknoteValue;
     }
 
+    @Override
+    public String toString() {
+        return "Номинал кассеты " + BANKNOTE_VALUE + " Количество банкнот " + banknotesAmount;
+    }
+
+    public BanknotePar getBANKNOTE_VALUE() {
+        return BANKNOTE_VALUE;
+    }
+
+    public int getBanknotesAmount() {
+        return banknotesAmount;
+    }
+
+    public void setBanknotesAmount(int banknotesAmount) {
+        this.banknotesAmount = banknotesAmount;
+    }
+
     boolean isCassetteIsFull() {
-        return this.banknotesAmount >= MAX_CAPACITY;
+        return banknotesAmount >= MAX_CAPACITY;
     }
 
     int getFreeSlots() {

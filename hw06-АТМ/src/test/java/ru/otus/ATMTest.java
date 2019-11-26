@@ -17,6 +17,7 @@ class ATMTest {
     void setUp() {
         atm = new Bankomat();
         atm.getAtmCashBalance();
+        atm.printCell();
 //        new balance = 482500
     }
 

@@ -13,7 +13,7 @@ import java.util.TreeMap;
 import static java.lang.String.format;
 
 public class Cell  implements MoneyKeeper {
-    @Getter
+
     private final Map<Integer, AtmCell> CELL = new TreeMap<>();
 
     public Cell() {
@@ -74,6 +74,10 @@ public class Cell  implements MoneyKeeper {
         cashMap.forEach((banknotePar, amount) -> System.out.println(format("Номинал банкноты '%s', количество '%s'", banknotePar, amount)));
 
         return cashMap;
+    }
+
+    public Map<Integer, AtmCell> getCell() {
+        return CELL;
     }
 
     public int getCellBalance() {

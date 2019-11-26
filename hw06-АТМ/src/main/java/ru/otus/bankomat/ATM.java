@@ -11,4 +11,6 @@ public interface ATM {
     Map<BanknotePar, Integer> withdraw(int cashAmount);
 
     int getAtmCashBalance();
+
+    void printCell();
 }

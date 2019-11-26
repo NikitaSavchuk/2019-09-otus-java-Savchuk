@@ -37,4 +37,9 @@ public class Bankomat implements ATM {
         System.out.println("Текущий баланс: " + cassettesBalance);
         return cassettesBalance;
     }
+
+    @Override
+    public void printCell() {
+        CELL.getCell().values().forEach(System.out::println);
+    }
 }
