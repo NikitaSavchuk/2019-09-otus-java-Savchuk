@@ -3,7 +3,7 @@ package ru.otus.cell;
 import ru.otus.BanknotePar;
 import ru.otus.atmException.CellOutOfAmountException;
 
-public class AtmCell {
+public class AtmCell implements AtmCellInterface {
     private final int MAX_CAPACITY = 1000;
     private final BanknotePar BANKNOTE_VALUE;
 
@@ -33,27 +33,33 @@ public class AtmCell {
         this.banknotesAmount = banknotesAmount;
     }
 
-    boolean isCassetteIsFull() {
+    @Override
+    public boolean isCellIsFull() {
         return banknotesAmount >= MAX_CAPACITY;
     }
 
-    int getFreeSlots() {
+    @Override
+    public int getFreeSlots() {
         return MAX_CAPACITY - banknotesAmount;
     }
 
-    void resetBanknoteAmount() {
+    @Override
+    public void resetBanknoteAmount() {
         banknotesAmount = savedBanknoteAmount;
     }
 
-    int getCassetteBalance() {
+    @Override
+    public int getCellBalance() {
         return BANKNOTE_VALUE.getValue() * banknotesAmount;
     }
 
-    void saveBanknotesAmount() {
+    @Override
+    public void saveBanknotesAmount() {
         savedBanknoteAmount = banknotesAmount;
     }
 
-    void decrementBanknotesAmount() {
+    @Override
+    public void decrementBanknotesAmount() {
         banknotesAmount--;
     }
 }

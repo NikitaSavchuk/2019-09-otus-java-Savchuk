@@ -1,6 +1,5 @@
 package ru.otus.cell;
 
-import lombok.Getter;
 import ru.otus.BanknotePar;
 import ru.otus.atmException.CellIsFullException;
 import ru.otus.atmException.CellOutOfAmountException;
@@ -12,8 +11,7 @@ import java.util.TreeMap;
 
 import static java.lang.String.format;
 
-public class Cell  implements MoneyKeeper {
-
+public class Cell implements MoneyKeeper {
     private final Map<Integer, AtmCell> CELL = new TreeMap<>();
 
     public Cell() {
@@ -33,7 +31,7 @@ public class Cell  implements MoneyKeeper {
         }
         AtmCell cell = CELL.get(banknoteParValue.getValue());
 
-        if (cell.isCassetteIsFull() || cell.getFreeSlots() < banknotesAmount) {
+        if (cell.isCellIsFull() || cell.getFreeSlots() < banknotesAmount) {
             throw new CellIsFullException(format("Ячейка переполнена, нельзя внести больше, свободных ячеек %s, а вносится %s", cell.getFreeSlots(), banknotesAmount));
         }
         cell.setBanknotesAmount(cell.getBanknotesAmount() + banknotesAmount);
@@ -81,11 +79,6 @@ public class Cell  implements MoneyKeeper {
     }
 
     public int getCellBalance() {
-        int sum = 0;
-        for (AtmCell atmCell : CELL.values()) {
-            int freeSlots = atmCell.getCassetteBalance();
-            sum += freeSlots;
-        }
-        return sum;
+        return CELL.values().stream().mapToInt(AtmCellInterface::getCellBalance).sum();
     }
 }
