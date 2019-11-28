@@ -34,7 +34,8 @@ public class Cell implements MoneyKeeper {
         if (cell.isCellIsFull() || cell.getFreeSlots() < banknotesAmount) {
             throw new CellIsFullException(format("Ячейка переполнена, нельзя внести больше, свободных ячеек %s, а вносится %s", cell.getFreeSlots(), banknotesAmount));
         }
-        cell.setBanknotesAmount(cell.getBanknotesAmount() + banknotesAmount);
+//        cell.changeBanknotesAmount(cell.getBanknotesAmount() + banknotesAmount);
+        cell.changeBanknotesAmount(banknotesAmount);
     }
 
     @Override

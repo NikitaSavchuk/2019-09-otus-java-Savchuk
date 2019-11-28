@@ -1,7 +1,10 @@
 package ru.otus.cell;
 
 import ru.otus.BanknotePar;
+import ru.otus.atmException.CellIsFullException;
 import ru.otus.atmException.CellOutOfAmountException;
+
+import static java.lang.String.format;
 
 public class AtmCell implements AtmCellInterface {
     private final int MAX_CAPACITY = 1000;
@@ -29,8 +32,15 @@ public class AtmCell implements AtmCellInterface {
         return banknotesAmount;
     }
 
-    public void setBanknotesAmount(int banknotesAmount) {
-        this.banknotesAmount = banknotesAmount;
+    public void changeBanknotesAmount(int banknotesAmount) throws CellIsFullException {
+        if (banknotesAmount % this.banknotesAmount == 0 && banknotesAmount > 0) {
+            if (getFreeSlots() < banknotesAmount) {
+                throw new CellIsFullException(format("Ячейка переполнена, нельзя внести больше, свободных ячеек %s, а вносится %s"
+                        , getFreeSlots(), banknotesAmount));
+            } else {
+                this.banknotesAmount += banknotesAmount;
+            }
+        }
     }
 
     @Override
