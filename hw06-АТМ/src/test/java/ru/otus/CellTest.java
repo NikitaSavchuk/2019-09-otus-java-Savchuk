@@ -25,6 +25,13 @@ public class CellTest {
     }
 
     @Test
+    void depositMinusThrowsCellIsFullException() {
+        assertThrows(CellOutOfAmountException.class, () -> {
+            cell.deposit(BanknotePar.ONE_THOUSAND, -1);
+        });
+    }
+
+    @Test
     void withdrawException() {
         assertThrows(CellOutOfAmountException.class, () -> {
             cell.withdraw(500_000);

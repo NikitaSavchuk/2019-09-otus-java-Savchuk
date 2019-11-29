@@ -58,6 +58,11 @@ class ATMTest {
     }
 
     @Test
+    void depositCashMinus() {
+        atm.deposit(BanknotePar.FIVE_HUNDRED, -1);
+    }
+
+    @Test
     void depositCashFullException() {
         atm.deposit(BanknotePar.FIVE_HUNDRED, 1000);
     }

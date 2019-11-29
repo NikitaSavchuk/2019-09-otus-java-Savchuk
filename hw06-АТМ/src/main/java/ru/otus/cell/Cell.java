@@ -31,10 +31,6 @@ public class Cell implements MoneyKeeper {
         }
         AtmCell cell = CELL.get(banknoteParValue.getValue());
 
-        if (cell.isCellIsFull() || cell.getFreeSlots() < banknotesAmount) {
-            throw new CellIsFullException(format("Ячейка переполнена, нельзя внести больше, свободных ячеек %s, а вносится %s", cell.getFreeSlots(), banknotesAmount));
-        }
-//        cell.changeBanknotesAmount(cell.getBanknotesAmount() + banknotesAmount);
         cell.changeBanknotesAmount(banknotesAmount);
     }
 
@@ -80,6 +76,6 @@ public class Cell implements MoneyKeeper {
     }
 
     public int getCellBalance() {
-        return CELL.values().stream().mapToInt(AtmCellInterface::getCellBalance).sum();
+        return CELL.values().stream().mapToInt(Cassette::getCellBalance).sum();
     }
 }

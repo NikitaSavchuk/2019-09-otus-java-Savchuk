@@ -1,6 +1,6 @@
 package ru.otus.cell;
 
-public interface AtmCellInterface {
+public interface Cassette {
 
     boolean isCellIsFull();
 

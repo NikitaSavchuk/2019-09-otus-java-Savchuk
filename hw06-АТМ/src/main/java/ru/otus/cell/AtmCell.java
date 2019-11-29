@@ -6,15 +6,16 @@ import ru.otus.atmException.CellOutOfAmountException;
 
 import static java.lang.String.format;
 
-public class AtmCell implements AtmCellInterface {
+public class AtmCell implements Cassette {
     private final int MAX_CAPACITY = 1000;
     private final BanknotePar BANKNOTE_VALUE;
 
     private int banknotesAmount;
     private int savedBanknoteAmount;
 
-    AtmCell(BanknotePar banknoteValue, int banknotesAmount)  throws CellOutOfAmountException {
-       if (banknotesAmount < 0 || banknotesAmount >= MAX_CAPACITY) throw new CellOutOfAmountException("Недопустимое значение!");
+    AtmCell(BanknotePar banknoteValue, int banknotesAmount) throws CellOutOfAmountException {
+        if (banknotesAmount < 0 || banknotesAmount >= MAX_CAPACITY)
+            throw new CellOutOfAmountException("Недопустимое значение!");
         this.banknotesAmount = banknotesAmount;
         this.BANKNOTE_VALUE = banknoteValue;
     }
@@ -33,13 +34,15 @@ public class AtmCell implements AtmCellInterface {
     }
 
     public void changeBanknotesAmount(int banknotesAmount) throws CellIsFullException {
-        if (banknotesAmount % this.banknotesAmount == 0 && banknotesAmount > 0) {
-            if (getFreeSlots() < banknotesAmount) {
+        if (banknotesAmount > 0) {
+            if (isCellIsFull() || getFreeSlots() < banknotesAmount) {
                 throw new CellIsFullException(format("Ячейка переполнена, нельзя внести больше, свободных ячеек %s, а вносится %s"
                         , getFreeSlots(), banknotesAmount));
             } else {
                 this.banknotesAmount += banknotesAmount;
             }
+        } else {
+            throw new IllegalArgumentException("Недопустимое значение!");
         }
     }
 
