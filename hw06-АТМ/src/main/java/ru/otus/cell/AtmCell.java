@@ -66,7 +66,7 @@ public class AtmCell implements Cassette {
     @Override
     public void extractBanknotesAmount(int banknotesAmount) {
         if (banknotesAmount < 0) throw new IllegalArgumentException("Недопустимое значение!");
-        else this.banknotesAmount--;
+        else this.banknotesAmount = banknotesAmount - 1;
     }
 
     @Override
