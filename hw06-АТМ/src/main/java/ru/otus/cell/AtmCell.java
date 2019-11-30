@@ -14,7 +14,7 @@ public class AtmCell implements Cassette {
     private int savedBanknoteAmount;
 
     AtmCell(BanknotePar banknoteValue, int banknotesAmount) throws CellOutOfAmountException {
-        if (banknotesAmount < 0 || banknotesAmount >= MAX_CAPACITY)
+        if (banknotesAmount < 0 || banknotesAmount > MAX_CAPACITY)
             throw new CellOutOfAmountException("Недопустимое значение!");
         this.banknotesAmount = banknotesAmount;
         this.BANKNOTE_VALUE = banknoteValue;
@@ -33,7 +33,8 @@ public class AtmCell implements Cassette {
         return banknotesAmount;
     }
 
-    public void changeBanknotesAmount(int banknotesAmount) throws CellIsFullException {
+    @Override
+    public void addBanknotesAmount(int banknotesAmount) throws CellIsFullException {
         if (banknotesAmount > 0) {
             if (isCellIsFull() || getFreeSlots() < banknotesAmount) {
                 throw new CellIsFullException(format("Ячейка переполнена, нельзя внести больше, свободных ячеек %s, а вносится %s"
@@ -44,6 +45,11 @@ public class AtmCell implements Cassette {
         } else {
             throw new IllegalArgumentException("Недопустимое значение!");
         }
+    }
+
+    @Override
+    public void extractBanknotesAmount() {
+        banknotesAmount--;
     }
 
     @Override
@@ -69,10 +75,5 @@ public class AtmCell implements Cassette {
     @Override
     public void saveBanknotesAmount() {
         savedBanknoteAmount = banknotesAmount;
-    }
-
-    @Override
-    public void decrementBanknotesAmount() {
-        banknotesAmount--;
     }
 }

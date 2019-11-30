@@ -1,5 +1,7 @@
 package ru.otus.cell;
 
+import ru.otus.atmException.CellIsFullException;
+
 public interface Cassette {
 
     boolean isCellIsFull();
@@ -12,5 +14,7 @@ public interface Cassette {
 
     void saveBanknotesAmount();
 
-    void decrementBanknotesAmount();
+    void addBanknotesAmount(int banknotesAmount)  throws CellIsFullException;
+
+    void extractBanknotesAmount();
 }

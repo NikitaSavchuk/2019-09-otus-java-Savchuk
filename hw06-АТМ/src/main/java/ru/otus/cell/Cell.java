@@ -4,10 +4,7 @@ import ru.otus.BanknotePar;
 import ru.otus.atmException.CellIsFullException;
 import ru.otus.atmException.CellOutOfAmountException;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -31,7 +28,7 @@ public class Cell implements MoneyKeeper {
         }
         AtmCell cell = CELL.get(banknoteParValue.getValue());
 
-        cell.changeBanknotesAmount(banknotesAmount);
+        cell.addBanknotesAmount(banknotesAmount);
     }
 
     @Override
@@ -42,8 +39,13 @@ public class Cell implements MoneyKeeper {
             System.out.println("Введено недопустимое значение: " + cashAmount);
             return Collections.emptyMap();
         }
+        return getBanknoteParMap(cashAmount);
+    }
+
+    private Map<BanknotePar, Integer> getBanknoteParMap(int cashAmount) {
         Map<BanknotePar, Integer> cashMap = new HashMap<>();
-        Map<Integer, AtmCell> sortedCell = new TreeMap<>(CELL);
+        Map<Integer, AtmCell> sortedCell = new TreeMap<>(Comparator.reverseOrder());
+        sortedCell.putAll(CELL);
         int cashSum = cashAmount;
 
         for (AtmCell cassette : sortedCell.values()) {
@@ -54,11 +56,9 @@ public class Cell implements MoneyKeeper {
                 int num = cashMap.getOrDefault(banknotePar, 0);
                 cashMap.put(banknotePar, num + 1);
                 cashSum -= banknotePar.getValue();
-                cassette.decrementBanknotesAmount();
+                cassette.extractBanknotesAmount();
             }
-            if (cashSum == 0) {
-                break;
-            }
+            if (cashSum == 0) break;
         }
         if (cashSum > 0) {
             sortedCell.values().forEach(AtmCell::resetBanknoteAmount);
