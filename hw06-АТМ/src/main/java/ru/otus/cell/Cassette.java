@@ -1,6 +1,9 @@
 package ru.otus.cell;
 
+import ru.otus.BanknotePar;
 import ru.otus.atmException.CellIsFullException;
+
+import java.util.Map;
 
 public interface Cassette {
 
@@ -16,5 +19,7 @@ public interface Cassette {
 
     void addBanknotesAmount(int banknotesAmount)  throws CellIsFullException;
 
-    void extractBanknotesAmount();
+    void extractBanknotesAmount(int banknotesAmount);
+
+    int extractCashSum(Map<BanknotePar, Integer> cashMap, int cashSum);
 }

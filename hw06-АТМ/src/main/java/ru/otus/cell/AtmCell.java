@@ -4,6 +4,8 @@ import ru.otus.BanknotePar;
 import ru.otus.atmException.CellIsFullException;
 import ru.otus.atmException.CellOutOfAmountException;
 
+import java.util.Map;
+
 import static java.lang.String.format;
 
 public class AtmCell implements Cassette {
@@ -48,8 +50,23 @@ public class AtmCell implements Cassette {
     }
 
     @Override
-    public void extractBanknotesAmount() {
-        banknotesAmount--;
+    public int extractCashSum(Map<BanknotePar, Integer> cashMap, int cashSum) {
+        BanknotePar banknotePar = getBANKNOTE_VALUE();
+        saveBanknotesAmount();
+
+        while (cashSum > 0 && banknotePar.getValue() <= cashSum && getBanknotesAmount() > 0) {
+            int num = cashMap.getOrDefault(banknotePar, 0);
+            cashMap.put(banknotePar, num + 1);
+            cashSum -= banknotePar.getValue();
+            extractBanknotesAmount(banknotesAmount);
+        }
+        return cashSum;
+    }
+
+    @Override
+    public void extractBanknotesAmount(int banknotesAmount) {
+        if (banknotesAmount < 0) throw new IllegalArgumentException("Недопустимое значение!");
+        else this.banknotesAmount--;
     }
 
     @Override

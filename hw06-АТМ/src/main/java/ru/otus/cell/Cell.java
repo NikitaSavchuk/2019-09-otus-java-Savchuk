@@ -48,16 +48,8 @@ public class Cell implements MoneyKeeper {
         sortedCell.putAll(CELL);
         int cashSum = cashAmount;
 
-        for (AtmCell cassette : sortedCell.values()) {
-            BanknotePar banknotePar = cassette.getBANKNOTE_VALUE();
-            cassette.saveBanknotesAmount();
-
-            while (cashSum > 0 && banknotePar.getValue() <= cashSum && cassette.getBanknotesAmount() > 0) {
-                int num = cashMap.getOrDefault(banknotePar, 0);
-                cashMap.put(banknotePar, num + 1);
-                cashSum -= banknotePar.getValue();
-                cassette.extractBanknotesAmount();
-            }
+        for (AtmCell cell : sortedCell.values()) {
+            cashSum = cell.extractCashSum(cashMap, cashSum);
             if (cashSum == 0) break;
         }
         if (cashSum > 0) {
