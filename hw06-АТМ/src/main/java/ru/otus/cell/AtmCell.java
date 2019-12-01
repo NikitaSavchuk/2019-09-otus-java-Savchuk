@@ -54,19 +54,19 @@ public class AtmCell implements Cassette {
         BanknotePar banknotePar = getBANKNOTE_VALUE();
         saveBanknotesAmount();
 
-        while (cashSum > 0 && banknotePar.getValue() <= cashSum && getBanknotesAmount() > 0) {
+        while (cashSum > 0 && banknotePar.getNominal() <= cashSum && getBanknotesAmount() > 0) {
             int num = cashMap.getOrDefault(banknotePar, 0);
             cashMap.put(banknotePar, num + 1);
-            cashSum -= banknotePar.getValue();
-            extractBanknotesAmount(banknotesAmount);
+            cashSum -= banknotePar.getNominal();
+            extractBanknotesAmount();
         }
         return cashSum;
     }
 
     @Override
-    public void extractBanknotesAmount(int banknotesAmount) {
+    public void extractBanknotesAmount() {
+        banknotesAmount--;
         if (banknotesAmount < 0) throw new IllegalArgumentException("Недопустимое значение!");
-        else this.banknotesAmount = banknotesAmount - 1;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class AtmCell implements Cassette {
 
     @Override
     public int getCellBalance() {
-        return BANKNOTE_VALUE.getValue() * banknotesAmount;
+        return BANKNOTE_VALUE.getNominal() * banknotesAmount;
     }
 
     @Override

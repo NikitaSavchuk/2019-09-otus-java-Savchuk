@@ -12,14 +12,14 @@ public enum BanknotePar {
     FIVE_THOUSAND(5000);
 
     @Getter
-    private final int value;
+    private final int nominal;
 
-    BanknotePar(int value) {
-        this.value = value;
+    BanknotePar(int nominal) {
+        this.nominal = nominal;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return String.valueOf(nominal);
     }
 }

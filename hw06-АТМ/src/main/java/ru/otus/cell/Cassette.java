@@ -19,7 +19,7 @@ public interface Cassette {
 
     void addBanknotesAmount(int banknotesAmount)  throws CellIsFullException;
 
-    void extractBanknotesAmount(int banknotesAmount);
+    void extractBanknotesAmount();
 
     int extractCashSum(Map<BanknotePar, Integer> cashMap, int cashSum);
 }

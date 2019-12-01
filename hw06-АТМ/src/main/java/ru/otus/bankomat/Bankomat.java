@@ -15,7 +15,7 @@ public class Bankomat implements ATM {
     public void deposit(BanknotePar banknoteParValue, int banknotesAmount) {
         try {
             CELL.deposit(banknoteParValue, banknotesAmount);
-            System.out.println("Внесено: " + banknoteParValue.getValue() * banknotesAmount);
+            System.out.println("Внесено: " + banknoteParValue.getNominal() * banknotesAmount);
         } catch (CellOutOfAmountException | CellIsFullException e) {
             e.printStackTrace();
         }

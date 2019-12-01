@@ -14,7 +14,7 @@ public class Cell implements MoneyKeeper {
     public Cell() {
         try {
             for (BanknotePar banknoteValue : BanknotePar.values()) {
-                CELL.put(banknoteValue.getValue(), new AtmCell(banknoteValue, 50));
+                CELL.put(banknoteValue.getNominal(), new AtmCell(banknoteValue, 50));
             }
         } catch (CellOutOfAmountException e) {
             e.printStackTrace();
@@ -26,7 +26,7 @@ public class Cell implements MoneyKeeper {
         if (banknoteParValue == null || banknotesAmount <= 0) {
             throw new CellOutOfAmountException(format("Некорретно указана сумма '%s' или номинал '%s'", banknotesAmount, banknoteParValue));
         }
-        AtmCell cell = CELL.get(banknoteParValue.getValue());
+        AtmCell cell = CELL.get(banknoteParValue.getNominal());
 
         cell.addBanknotesAmount(banknotesAmount);
     }
