@@ -1,8 +1,7 @@
 package ru.otus.bankomat;
 
 import ru.otus.BanknotePar;
-import ru.otus.strategies.WithdrawStrategy;
-import ru.otus.visitor.Visitor;
+import ru.otus.cell.Cell;
 
 import java.util.Map;
 
@@ -20,13 +19,9 @@ public interface ATM {
 
     void restoreStartState();
 
-    <T> T accept(Visitor<T> visitor);
-
-    WithdrawStrategy getWithdrawStrategy();
-
-    void setWithdrawStrategy(WithdrawStrategy withdrawStrategy);
-
     String getId();
 
     void showCurrentAtmCashBalance();
+
+    Cell getCell();
 }

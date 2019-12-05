@@ -1,21 +1,22 @@
 package ru.otus.bankomat;
 
 
-import ru.otus.BanknotePar;
-import ru.otus.state.StartState;
-import ru.otus.strategies.WithdrawStrategy;
-import ru.otus.visitor.Visitor;
-import ru.otus.atmException.CellIsFullException;
-import ru.otus.atmException.CellOutOfAmountException;
-import ru.otus.cell.Cell;
+import static java.lang.String.format;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
+import ru.otus.BanknotePar;
+import ru.otus.atmException.CellIsFullException;
+import ru.otus.atmException.CellOutOfAmountException;
+import ru.otus.cell.Cell;
+import ru.otus.state.StartState;
+import ru.otus.strategies.WithdrawStrategy;
+import ru.otus.visitor.Element;
+import ru.otus.visitor.Visitor;
 
-import static java.lang.String.format;
+public class Bankomat implements ATM, Element, Serializable {
 
-public class Bankomat implements ATM, Serializable {
     private Cell CELL = new Cell();
     private WithdrawStrategy withdrawStrategy;
     private String id;
@@ -39,7 +40,7 @@ public class Bankomat implements ATM, Serializable {
     }
 
     @Override
-    public <T> T accept(Visitor<T> visitor) {
+    public <T> int accept(Visitor<T> visitor) {
         return visitor.visit(this);
     }
 
@@ -56,16 +57,7 @@ public class Bankomat implements ATM, Serializable {
     }
 
     @Override
-    public WithdrawStrategy getWithdrawStrategy() {
-        return withdrawStrategy;
-    }
-
-    @Override
-    public void setWithdrawStrategy(WithdrawStrategy withdrawStrategy) {
-        this.withdrawStrategy = withdrawStrategy;
-    }
-
-    public Cell getCELL() {
+    public Cell getCell() {
         return CELL;
     }
 

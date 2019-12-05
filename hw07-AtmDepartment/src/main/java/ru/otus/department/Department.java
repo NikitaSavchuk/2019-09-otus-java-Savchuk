@@ -19,7 +19,7 @@ public class Department implements AtmDepartment {
     private List<ATM> atmList = new ArrayList<>();
     private final int DEFAULT_NUMBER = 5;
     private WithdrawStrategy DEFAULT_STRATEGY = new WithdrawStrategy();
-    private final Visitor VISITOR = new CashBalanceVisitor();
+    private final Visitor<Integer> VISITOR = new CashBalanceVisitor();
 
     public Department() {
         for (int i = 1; i < DEFAULT_NUMBER; i ++) {
@@ -41,7 +41,7 @@ public class Department implements AtmDepartment {
     }
 
     public int getTotalCashAmount() {
-        return atmList.stream().mapToInt(atm -> (int) atm.accept(VISITOR)).sum();
+        return atmList.stream().mapToInt(VISITOR::visit).sum();
     }
 
     public void showTotalCashAmount() {

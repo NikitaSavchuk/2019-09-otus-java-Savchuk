@@ -4,13 +4,15 @@ package ru.otus.cell;
 import ru.otus.BanknotePar;
 import ru.otus.atmException.CellIsFullException;
 import ru.otus.atmException.CellOutOfAmountException;
+import ru.otus.visitor.Element;
+import ru.otus.visitor.Visitor;
 
 import java.io.Serializable;
 import java.util.*;
 
 import static java.lang.String.format;
 
-public class Cell implements MoneyKeeper, Serializable {
+public class Cell implements MoneyKeeper, Element, Serializable {
 
     private final Map<Integer, AtmCell> CELL = new TreeMap<>();
 
@@ -22,6 +24,11 @@ public class Cell implements MoneyKeeper, Serializable {
         } catch (CellOutOfAmountException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public <T> int accept(Visitor<T> visitor) {
+        return getCellBalance();
     }
 
     @Override
