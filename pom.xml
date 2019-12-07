@@ -19,6 +19,7 @@
         <module>hw04-Log</module>
         <module>hw05-annotations</module>
         <module>hw06-АТМ</module>
+        <module>hw07-AtmDepartment</module>
     </modules>
 
     <properties>
