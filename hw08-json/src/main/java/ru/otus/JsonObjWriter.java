@@ -13,7 +13,7 @@ class JsonObjWriter {
 
     String toJsonString(Object obj) {
         if (obj == null) {
-            return null;
+            return JsonValue.NULL.toString();
         }
         JsonValue jsonValue = createJsonValue(obj.getClass(), obj);
         return jsonValue == null ? null : jsonValue.toString();
