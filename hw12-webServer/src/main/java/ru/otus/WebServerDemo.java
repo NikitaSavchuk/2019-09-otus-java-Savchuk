@@ -9,6 +9,7 @@ import ru.otus.api.model.Address;
 import ru.otus.api.model.Phone;
 import ru.otus.api.model.User;
 import ru.otus.api.service.DBServiceCachedUser;
+import ru.otus.api.service.UserAuthService;
 import ru.otus.cache.MyCache;
 import ru.otus.hibernate.HibernateUtils;
 import ru.otus.hibernate.dao.UserDaoHibernate;
@@ -24,6 +25,8 @@ import java.util.List;
 */
 public class WebServerDemo {
     private static Logger logger = LoggerFactory.getLogger(WebServerDemo.class);
+    private static final int WEB_SERVER_PORT = 8080;
+    private static final UserAuthService USER_AUTH_SERVICE = new UserAuthService();
     private DBServiceCachedUser dbServiceCachedUser;
 
     public static void main(String[] args) throws Exception {
@@ -34,7 +37,7 @@ public class WebServerDemo {
     }
 
     private void startWebServer() throws Exception {
-        ServerManager serverManager = new ServerManager();
+        ServerManager serverManager = new ServerManager(WEB_SERVER_PORT, USER_AUTH_SERVICE);
         Server server = serverManager.createServer(dbServiceCachedUser);
 
         server.start();

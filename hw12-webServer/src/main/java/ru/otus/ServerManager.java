@@ -18,19 +18,26 @@ import ru.otus.servlet.LoginServlet;
 import java.io.IOException;
 
 class ServerManager {
-
-    private static final int WEB_SERVER_PORT = 8080;
     private static final String TEMPLATES_DIR = "/templates/";
-    private static final UserAuthService USER_AUTH_SERVICE = new UserAuthService();
+    private static final String COMMON_RESOURCES_DIR = "/static";
+    private static final String ROLE_NAME_ADMIN = "/admin";
+
+    private final UserAuthService USER_AUTH_SERVICE;
+    private final int WEB_SERVER_PORT;
+
+    ServerManager(int port, UserAuthService user_auth_service) {
+        WEB_SERVER_PORT = port;
+        USER_AUTH_SERVICE = user_auth_service;
+    }
 
     Server createServer(DBServiceCachedUser dbServiceCachedUser) throws IOException {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
         context.addServlet(new ServletHolder(new LoginServlet(USER_AUTH_SERVICE, templateProcessor)), "/login");
-        context.addServlet(new ServletHolder(new AdminServlet(dbServiceCachedUser, templateProcessor)), "/admin");
+        context.addServlet(new ServletHolder(new AdminServlet(dbServiceCachedUser, templateProcessor)), ROLE_NAME_ADMIN);
 
-        context.addFilter(new FilterHolder(new AuthorizationFilter()), "/admin", null);
+        context.addFilter(new FilterHolder(new AuthorizationFilter()), ROLE_NAME_ADMIN, null);
 
         Server server = new Server(WEB_SERVER_PORT);
         server.setHandler(new HandlerList(createResourceHandler(), context));
@@ -39,7 +46,7 @@ class ServerManager {
 
     private ResourceHandler createResourceHandler() {
         ResourceHandler resourceHandler = new ResourceHandler();
-        Resource resource = Resource.newClassPathResource("/static");
+        Resource resource = Resource.newClassPathResource(COMMON_RESOURCES_DIR);
         resourceHandler.setBaseResource(resource);
         return resourceHandler;
     }
