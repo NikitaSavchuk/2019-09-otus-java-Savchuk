@@ -19,13 +19,13 @@ public class AdminServlet extends HttpServlet {
     private static final String ADMIN_PAGE_TEMPLATE = "admin.html";
     private static final String CREATED_USER_VAR_NAME = "createdUser";
     private static final String USERS_LIST_VAR_NAME = "usersList";
-    public static final String TEXT_HTML_CHARSET_UTF_8 = "text/html;charset=utf-8";
+    private static final String TEXT_HTML_CHARSET_UTF_8 = "text/html;charset=utf-8";
 
     private final TemplateProcessor templateProcessor;
     private DBServiceCachedUser cachedUser;
 
-    public AdminServlet(DBServiceCachedUser cachedUser, TemplateProcessor templateProcessor) {
-        this.cachedUser = cachedUser;
+    public AdminServlet(DBServiceCachedUser cachedUserService, TemplateProcessor templateProcessor) {
+        this.cachedUser = cachedUserService;
         this.templateProcessor = templateProcessor;
     }
 
@@ -35,7 +35,7 @@ public class AdminServlet extends HttpServlet {
         pageVariables.put(USERS_LIST_VAR_NAME, Collections.emptyList());
         pageVariables.put(CREATED_USER_VAR_NAME, Collections.emptyList());
 
-        response.setContentType("text/html;charset=utf-8");
+        response.setContentType(TEXT_HTML_CHARSET_UTF_8);
         response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
         response.setStatus(SC_OK);
     }
@@ -44,31 +44,42 @@ public class AdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //Если в запросе была нажата кнопка "Создать нового пользователя"
         if (request.getParameter("createUser") != null) {
-            String userName = request.getParameter("userName");
-            int userAge = Integer.parseInt(request.getParameter("userAge"));
-
-            User savedUser = new User(userName, userAge);
-            cachedUser.saveUser(savedUser);
-
-            Map<String, Object> pageVariables = new HashMap<>();
-            pageVariables.put(CREATED_USER_VAR_NAME, Collections.singletonList(savedUser));
-            pageVariables.put(USERS_LIST_VAR_NAME, Collections.emptyList());
-
-            response.setContentType(TEXT_HTML_CHARSET_UTF_8);
-            response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
-            response.setStatus(SC_OK);
-
+            doPostForCreateUser(request, response);
         } else if (request.getParameter("getUsersList") != null) {
-            Map<String, Object> page = new HashMap<>();
-            page.put(CREATED_USER_VAR_NAME, Collections.emptyList());
-            page.put(USERS_LIST_VAR_NAME, cachedUser.getUsersList());
-
-            response.setContentType(TEXT_HTML_CHARSET_UTF_8);
-            response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, page));
-            response.setStatus(SC_OK);
+            doPostForGetUsersList(response);
         } else if (request.getParameter("exitAdminPanel") != null) {
-            request.getSession().invalidate();
-            response.sendRedirect("/login");
+            exitAdminPanel(request, response);
         }
+    }
+
+    private void exitAdminPanel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.getSession().invalidate();
+        response.sendRedirect("/login");
+    }
+
+    private void doPostForGetUsersList(HttpServletResponse response) throws IOException {
+        Map<String, Object> page = new HashMap<>();
+        page.put(CREATED_USER_VAR_NAME, Collections.emptyList());
+        page.put(USERS_LIST_VAR_NAME, cachedUser.getUsersList());
+
+        response.setContentType(TEXT_HTML_CHARSET_UTF_8);
+        response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, page));
+        response.setStatus(SC_OK);
+    }
+
+    private void doPostForCreateUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String userName = request.getParameter("userName");
+        int userAge = Integer.parseInt(request.getParameter("userAge"));
+
+        User savedUser = new User(userName, userAge);
+        cachedUser.saveUser(savedUser);
+
+        Map<String, Object> pageVariables = new HashMap<>();
+        pageVariables.put(CREATED_USER_VAR_NAME, Collections.singletonList(savedUser));
+        pageVariables.put(USERS_LIST_VAR_NAME, Collections.emptyList());
+
+        response.setContentType(TEXT_HTML_CHARSET_UTF_8);
+        response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
+        response.setStatus(SC_OK);
     }
 }
