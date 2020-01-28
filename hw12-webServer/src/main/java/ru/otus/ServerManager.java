@@ -10,7 +10,6 @@ import org.eclipse.jetty.util.resource.Resource;
 import ru.otus.api.service.DBServiceCachedUser;
 import ru.otus.api.service.UserAuthService;
 import ru.otus.services.TemplateProcessor;
-import ru.otus.services.TemplateProcessorImpl;
 import ru.otus.servlet.AdminServlet;
 import ru.otus.servlet.AuthorizationFilter;
 import ru.otus.servlet.LoginServlet;
@@ -18,7 +17,6 @@ import ru.otus.servlet.LoginServlet;
 import java.io.IOException;
 
 class ServerManager {
-    private static final String TEMPLATES_DIR = "/templates/";
     private static final String COMMON_RESOURCES_DIR = "/static";
     private static final String ROLE_NAME_ADMIN = "/admin";
 
@@ -30,10 +28,9 @@ class ServerManager {
         USER_AUTH_SERVICE = user_auth_service;
     }
 
-    Server createServer(DBServiceCachedUser dbServiceCachedUser) throws IOException {
+    Server createServer(DBServiceCachedUser dbServiceCachedUser, TemplateProcessor templateProcessor) throws IOException {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
         context.addServlet(new ServletHolder(new LoginServlet(USER_AUTH_SERVICE, templateProcessor)), "/login");
         context.addServlet(new ServletHolder(new AdminServlet(dbServiceCachedUser, templateProcessor)), ROLE_NAME_ADMIN);
 

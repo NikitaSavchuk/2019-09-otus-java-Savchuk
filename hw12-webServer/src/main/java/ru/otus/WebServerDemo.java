@@ -14,6 +14,8 @@ import ru.otus.cache.MyCache;
 import ru.otus.hibernate.HibernateUtils;
 import ru.otus.hibernate.dao.UserDaoHibernate;
 import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
+import ru.otus.services.TemplateProcessor;
+import ru.otus.services.TemplateProcessorImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.List;
 */
 public class WebServerDemo {
     private static Logger logger = LoggerFactory.getLogger(WebServerDemo.class);
+    private static final String TEMPLATES_DIR = "/templates/";
     private static final int WEB_SERVER_PORT = 8080;
     private static final UserAuthService USER_AUTH_SERVICE = new UserAuthService();
     private DBServiceCachedUser dbServiceCachedUser;
@@ -37,8 +40,9 @@ public class WebServerDemo {
     }
 
     private void startWebServer() throws Exception {
+        TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
         ServerManager serverManager = new ServerManager(WEB_SERVER_PORT, USER_AUTH_SERVICE);
-        Server server = serverManager.createServer(dbServiceCachedUser);
+        Server server = serverManager.createServer(dbServiceCachedUser, templateProcessor);
 
         server.start();
         server.join();
