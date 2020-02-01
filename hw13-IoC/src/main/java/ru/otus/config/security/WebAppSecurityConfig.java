@@ -34,7 +34,7 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
-                .antMatchers(HttpMethod.GET, "/WEB-INF/static/**").permitAll() // "/**"
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
