@@ -2,8 +2,6 @@ package ru.otus.api.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.otus.api.dao.UserDao;
 import ru.otus.domain.User;
 import ru.otus.api.sessionmanager.SessionManager;
@@ -12,12 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 public class DbServiceUserImpl implements DBServiceUser {
     private static Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
     private final UserDao userDao;
 
-    @Autowired
     public DbServiceUserImpl(UserDao userDao) {
         this.userDao = userDao;
     }

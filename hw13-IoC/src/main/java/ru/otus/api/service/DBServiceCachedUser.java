@@ -1,14 +1,14 @@
 package ru.otus.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.otus.api.dao.UserDao;
 import ru.otus.domain.User;
 import ru.otus.cache.MyCache;
 
 import java.util.Optional;
 
-@Component
+@Service
 public class DBServiceCachedUser extends DbServiceUserImpl {
 
     private final MyCache<String, User> entityCache;

@@ -35,7 +35,7 @@ public class AdminPanelController {
         return "users-list";
     }
 
-    @GetMapping("/showFormForAdd")
+    @GetMapping("/formForAdd")
     public String showForm(Model model) {
         User user = new User();
         model.addAttribute("user", user);
