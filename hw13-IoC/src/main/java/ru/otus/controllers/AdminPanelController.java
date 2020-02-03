@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.otus.api.service.DBServiceCachedUser;
+import ru.otus.config.InitDefaultUsersService;
 import ru.otus.domain.User;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -18,15 +18,13 @@ public class AdminPanelController {
 
     private DBServiceCachedUser serviceUser;
 
-    public AdminPanelController(DBServiceCachedUser serviceUser) {
-        this.serviceUser = serviceUser;
-    }
+//    public AdminPanelController(DBServiceCachedUser serviceUser) {
+//        this.serviceUser = serviceUser;
+//    }
 
-    //инициализация базы и кэша.
-    @PostConstruct
-    public void loadData() {
-        serviceUser.saveUser(new User("1", "2", 15));
-        serviceUser.saveUser(new User("3", "4", 51));
+    public AdminPanelController(InitDefaultUsersService initDefaultUsersService, DBServiceCachedUser serviceUser) {
+        initDefaultUsersService.init();
+        this.serviceUser = serviceUser;
     }
 
     @GetMapping("/list")
