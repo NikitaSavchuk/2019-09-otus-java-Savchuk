@@ -1,19 +1,20 @@
 package ru.otus.config;
 
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import ru.otus.api.service.DbServiceUserImpl;
 import ru.otus.domain.User;
 
-@Service
+@Configuration
 public class InitDefaultUsersServiceImpl implements InitDefaultUsersService {
 
     private final DbServiceUserImpl serviceUser;
-
 
     public InitDefaultUsersServiceImpl(DbServiceUserImpl dbServiceUser) {
         this.serviceUser = dbServiceUser;
     }
 
+    @Bean
     public void init() {
         User initialUser = new User("1", "2", 15);
         serviceUser.saveUser(initialUser);
