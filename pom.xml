@@ -27,6 +27,7 @@
         <module>hw12-webServer</module>
         <module>hw13-IoC</module>
         <module>hw14-JMM</module>
+        <module>hw15-MessageSystem</module>
     </modules>
 
     <properties>
