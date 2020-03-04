@@ -68,27 +68,23 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public MessageSystem messageSystem() {
-        var messageSystem = new MessageSystemImpl();
-        return messageSystem;
+        return new MessageSystemImpl();
     }
 
 
     @Bean
     public MsClient frontendMsClient() {
-        var frontendMsClient = new MsClientImpl(FRONTEND_SERVICE_CLIENT_NAME, messageSystem());
-        return frontendMsClient;
+        return new MsClientImpl(FRONTEND_SERVICE_CLIENT_NAME, messageSystem());
     }
 
     @Bean
     public FrontendService frontendService() {
-        var frontendService = new FrontendServiceImpl(frontendMsClient(), DATABASE_SERVICE_CLIENT_NAME);
-        return frontendService;
+        return new FrontendServiceImpl(frontendMsClient(), DATABASE_SERVICE_CLIENT_NAME);
     }
 
     @Bean
     public MsClient databaseMsClient() {
-        var databaseMsClient = new MsClientImpl(DATABASE_SERVICE_CLIENT_NAME, messageSystem());
-        return databaseMsClient;
+        return new MsClientImpl(DATABASE_SERVICE_CLIENT_NAME, messageSystem());
     }
 
     @PostConstruct
