@@ -1,32 +1,28 @@
 package ru.otus.domain;
 
-import com.google.gson.annotations.Expose;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
-@ToString
-@Getter
-@Setter
+@Entity
+@Data
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Expose(deserialize = false)
-    private long id;
-
-    private String firstName;
-    private String lastName;
+    @GeneratedValue
+    @Column(name = "USER_ID")
+    private Long id;
+    private String name;
     private int age;
-
-    public User(String firstName, String lastName, int age) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-    }
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "ADDRESS_ID")
+    private AddressDataSet addressDataSet;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<PhoneDataSet> phoneDataSets;
 }
