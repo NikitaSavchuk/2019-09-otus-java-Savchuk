@@ -28,25 +28,29 @@
         <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
-                    <label>Add user</label>
-                    <input type="text" id="name" class="form-control" placeholder="type name..." value="First">
-                    <input type="text" id="age" class="form-control" placeholder="type age..." value="21">
-                    <input type="text" id="address" class="form-control" placeholder="type address..." value="Planernaya 9">
+                    <label for="login">Login</label>
+                    <input  id="login", type="text" class="form-control" placeholder="type login...">
+                    <label for="password">Password</label>
+                    <input id="password", type="text" class="form-control" placeholder="type password...">
+                    <button id="authorization" class="btn btn-default" type="submit">Enter</button>
                 </div>
-                <button id="send" class="btn btn-default" type="submit">Send</button>
             </form>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <table id="users" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>User list</th>
-                </tr>
-                </thead>
-                <tbody id="userList"></tbody>
-            </table>
+            <div id="statusLine"></div>
+            <div id="userDataTableContainer"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div id="addUser"></div>
+            </form>
+            <form class="form-inline">
+                <div id="delUser"></div>
+            </form>
         </div>
     </div>
 </div>

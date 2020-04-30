@@ -1,28 +1,30 @@
 package ru.otus.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.io.Serializable;
 
-@Entity
 @Data
-@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@Entity
+@Table(name = "usersTable")
+public class User implements Serializable {
+
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
-    private Long id;
-    private String name;
-    private int age;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ADDRESS_ID")
-    private AddressDataSet addressDataSet;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<PhoneDataSet> phoneDataSets;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
+    private long id;
+
+    @Column(name = "login")
+    private String login;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "admin")
+    private boolean admin;
 }
