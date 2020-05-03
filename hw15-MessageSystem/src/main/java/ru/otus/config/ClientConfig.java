@@ -19,8 +19,8 @@ public class ClientConfig {
     private final DBServiceUser dbService;
     private final MessageSystem messageSystem;
 
-    @Bean
-    public MsClientImpl databaseMsClient(){
+    @Bean("databaseMsClient")
+    public MsClientImpl databaseMsClient() {
         MsClientImpl databaseMsClient = new MsClientImpl(MsClientName.DATABASE.getName(), messageSystem);
 
         databaseMsClient.addHandler(MessageType.AUTH_USER, new GetAuthUserRequestHandler(dbService));
