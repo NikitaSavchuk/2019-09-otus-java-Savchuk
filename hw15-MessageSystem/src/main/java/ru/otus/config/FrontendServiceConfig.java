@@ -10,7 +10,8 @@ import ru.otus.messagesystem.*;
 
 @Configuration
 @RequiredArgsConstructor
-public class WebConfig {
+public class FrontendServiceConfig {
+
     private final MessageSystem messageSystem;
 
     @Bean
